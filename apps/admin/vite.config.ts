@@ -11,10 +11,16 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@': resolve(__dirname, 'src'),
-        '@bingwu-my-monorepo/shared': resolve(__dirname, '../../packages/shared/src'),
-        '@bingwu-my-monorepo/components': resolve(__dirname, '../../packages/components/src'),
-        '@bingwu-my-monorepo/shared-types': resolve(__dirname, '../../packages/shared-types/src'),
-        '@bingwu-my-monorepo/shared-schemas': resolve(
+        '@student-side-job-platform/shared': resolve(__dirname, '../../packages/shared/src'),
+        '@student-side-job-platform/components': resolve(
+          __dirname,
+          '../../packages/components/src'
+        ),
+        '@student-side-job-platform/shared-types': resolve(
+          __dirname,
+          '../../packages/shared-types/src'
+        ),
+        '@student-side-job-platform/shared-schemas': resolve(
           __dirname,
           '../../packages/shared-schemas/src'
         ),

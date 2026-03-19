@@ -1,11 +1,11 @@
 import { http } from './index';
-import type { ApiResponse, PageResult } from '@bingwu-my-monorepo/shared';
+import type { ApiResponse, PageResult } from '@student-side-job-platform/shared';
 import type {
   Book,
   BookListQuery,
   CreateBookRequest,
   UpdateBookRequest,
-} from '@bingwu-my-monorepo/shared-types';
+} from '@student-side-job-platform/shared-types';
 
 export type { Book, BookListQuery, CreateBookRequest, UpdateBookRequest };
 

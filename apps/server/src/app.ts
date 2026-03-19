@@ -16,7 +16,7 @@ app.use('/api', apiRouter);
 
 app.get('/', (_req, res) => {
   res.json({
-    name: '@bingwu-my-monorepo/server',
+    name: '@student-side-job-platform/server',
     version: '0.0.0',
     env: config.nodeEnv,
     docs: '/api/health',

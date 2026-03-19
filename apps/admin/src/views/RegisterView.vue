@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { register } from '@/api/auth';
-import { registerSchema } from '@bingwu-my-monorepo/shared-schemas';
+import { registerSchema } from '@student-side-job-platform/shared-schemas';
 
 const router = useRouter();
 

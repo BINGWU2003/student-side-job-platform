@@ -6,8 +6,8 @@ import {
   updateBookSchema,
   bookListQuerySchema,
   idParamSchema,
-} from '@bingwu-my-monorepo/shared-schemas';
-import { HttpStatus, ApiCode } from '@bingwu-my-monorepo/shared';
+} from '@student-side-job-platform/shared-schemas';
+import { HttpStatus, ApiCode } from '@student-side-job-platform/shared';
 
 const router = Router();
 

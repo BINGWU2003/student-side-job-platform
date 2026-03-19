@@ -1,5 +1,5 @@
 {
-  "name": "@bingwu-my-monorepo/shared",
+  "name": "@student-side-job-platform/shared",
   "version": "0.0.0",
   "private": true,
   "description": "Shared utilities, helpers and HTTP client",

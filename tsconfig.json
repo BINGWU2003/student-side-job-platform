@@ -11,10 +11,10 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "@bingwu-my-monorepo/shared": ["packages/shared/src"],
-      "@bingwu-my-monorepo/components": ["packages/components/src"],
-      "@bingwu-my-monorepo/shared-types": ["packages/shared-types/src"],
-      "@bingwu-my-monorepo/shared-schemas": ["packages/shared-schemas/src"]
+      "@student-side-job-platform/shared": ["packages/shared/src"],
+      "@student-side-job-platform/components": ["packages/components/src"],
+      "@student-side-job-platform/shared-types": ["packages/shared-types/src"],
+      "@student-side-job-platform/shared-schemas": ["packages/shared-schemas/src"]
     }
   }
 }

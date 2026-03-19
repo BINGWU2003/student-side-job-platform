@@ -2,9 +2,9 @@ import { Router } from 'express';
 import prisma from '../lib/prisma';
 import { hashPassword, comparePassword } from '../lib/hash';
 import { signToken } from '../lib/jwt';
-import { loginSchema, registerSchema } from '@bingwu-my-monorepo/shared-schemas';
-import { HttpStatus, ApiCode } from '@bingwu-my-monorepo/shared';
-import type { LoginResponse } from '@bingwu-my-monorepo/shared-types';
+import { loginSchema, registerSchema } from '@student-side-job-platform/shared-schemas';
+import { HttpStatus, ApiCode } from '@student-side-job-platform/shared';
+import type { LoginResponse } from '@student-side-job-platform/shared-types';
 
 const router = Router();
 

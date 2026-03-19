@@ -1,5 +1,5 @@
 {
-  "name": "@bingwu-my-monorepo/server",
+  "name": "@student-side-job-platform/server",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -27,9 +27,9 @@
     "clean": "rimraf node_modules dist"
   },
   "dependencies": {
-    "@bingwu-my-monorepo/shared": "workspace:*",
-    "@bingwu-my-monorepo/shared-schemas": "workspace:*",
-    "@bingwu-my-monorepo/shared-types": "workspace:*",
+    "@student-side-job-platform/shared": "workspace:*",
+    "@student-side-job-platform/shared-schemas": "workspace:*",
+    "@student-side-job-platform/shared-types": "workspace:*",
     "@prisma/client": "^6.0.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",

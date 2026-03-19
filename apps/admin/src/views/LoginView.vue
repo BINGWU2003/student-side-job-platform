@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 import { login } from '@/api/auth';
-import { loginSchema } from '@bingwu-my-monorepo/shared-schemas';
+import { loginSchema } from '@student-side-job-platform/shared-schemas';
 
 const authStore = useAuthStore();
 const router = useRouter();

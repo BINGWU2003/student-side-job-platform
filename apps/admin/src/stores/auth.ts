@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import type { UserInfo } from '@bingwu-my-monorepo/shared-types';
+import type { UserInfo } from '@student-side-job-platform/shared-types';
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref<string | null>(localStorage.getItem('admin_token'));

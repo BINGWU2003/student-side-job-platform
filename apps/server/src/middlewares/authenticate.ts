@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import { verifyToken } from '../lib/jwt';
-import { HttpStatus, ApiCode } from '@bingwu-my-monorepo/shared';
+import { HttpStatus, ApiCode } from '@student-side-job-platform/shared';
 
 export function authenticate(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;

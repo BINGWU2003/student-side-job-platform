@@ -59,16 +59,16 @@ importers:
 
   apps/admin:
     dependencies:
-      '@bingwu-my-monorepo/components':
+      '@student-side-job-platform/components':
         specifier: workspace:*
         version: link:../../packages/components
-      '@bingwu-my-monorepo/shared':
+      '@student-side-job-platform/shared':
         specifier: workspace:*
         version: link:../../packages/shared
-      '@bingwu-my-monorepo/shared-schemas':
+      '@student-side-job-platform/shared-schemas':
         specifier: workspace:*
         version: link:../../packages/shared-schemas
-      '@bingwu-my-monorepo/shared-types':
+      '@student-side-job-platform/shared-types':
         specifier: workspace:*
         version: link:../../packages/shared-types
       pinia:
@@ -105,18 +105,18 @@ importers:
 
   apps/server:
     dependencies:
-      '@bingwu-my-monorepo/shared':
-        specifier: workspace:*
-        version: link:../../packages/shared
-      '@bingwu-my-monorepo/shared-schemas':
-        specifier: workspace:*
-        version: link:../../packages/shared-schemas
-      '@bingwu-my-monorepo/shared-types':
-        specifier: workspace:*
-        version: link:../../packages/shared-types
       '@prisma/client':
         specifier: ^6.0.0
         version: 6.19.2(prisma@6.19.2(typescript@5.9.3))(typescript@5.9.3)
+      '@student-side-job-platform/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+      '@student-side-job-platform/shared-schemas':
+        specifier: workspace:*
+        version: link:../../packages/shared-schemas
+      '@student-side-job-platform/shared-types':
+        specifier: workspace:*
+        version: link:../../packages/shared-types
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
@@ -172,7 +172,7 @@ importers:
 
   packages/components:
     dependencies:
-      '@bingwu-my-monorepo/shared':
+      '@student-side-job-platform/shared':
         specifier: workspace:*
         version: link:../shared
     devDependencies:

@@ -8,7 +8,7 @@ import {
   type Book,
   type CreateBookRequest,
 } from '@/api/books';
-import { createBookSchema, updateBookSchema } from '@bingwu-my-monorepo/shared-schemas';
+import { createBookSchema, updateBookSchema } from '@student-side-job-platform/shared-schemas';
 
 // ─── 列表状态 ───────────────────────────────────────────
 const list = ref<Book[]>([]);

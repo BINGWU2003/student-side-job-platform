@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import type { ButtonProps, ButtonEmits } from './types';
-import { generateId, formatDate } from '@bingwu-my-monorepo/shared';
+import { generateId, formatDate } from '@student-side-job-platform/shared';
 const props = withDefaults(defineProps<ButtonProps>(), {
   text: 'Button',
 });
