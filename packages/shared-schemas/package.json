@@ -1,0 +1,19 @@
+{
+  "name": "@bingwu-my-monorepo/shared-schemas",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Shared Zod validation schemas",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "clean": "rimraf node_modules"
+  },
+  "dependencies": {
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3"
+  }
+}

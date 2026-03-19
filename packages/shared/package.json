@@ -1,0 +1,19 @@
+{
+  "name": "@bingwu-my-monorepo/shared",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Shared utilities, helpers and HTTP client",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "clean": "rimraf node_modules"
+  },
+  "dependencies": {
+    "axios": "^1.7.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}
