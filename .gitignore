@@ -13,7 +13,6 @@ dist
 *.log
 .turbo
 cache
-.claude
 
 # 环境变量（保留 .env.example）
 .env
