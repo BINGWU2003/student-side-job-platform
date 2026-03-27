@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "turbo run dev",
     "dev:admin": "turbo run dev --filter=@student-side-job-platform/admin",
+    "dev:web": "turbo run dev --filter=@student-side-job-platform/web",
     "dev:server": "turbo run dev --filter=@student-side-job-platform/server",
     "build": "turbo run build",
     "build:admin": "turbo run build --filter=@student-side-job-platform/admin",

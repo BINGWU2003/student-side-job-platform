@@ -16,7 +16,6 @@
     "vue-router": "^4.4.0",
     "pinia": "^2.2.0",
     "@student-side-job-platform/shared": "workspace:*",
-    "@student-side-job-platform/components": "workspace:*",
     "@student-side-job-platform/shared-types": "workspace:*",
     "@student-side-job-platform/shared-schemas": "workspace:*"
   },

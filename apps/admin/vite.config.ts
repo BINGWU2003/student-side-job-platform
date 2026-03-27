@@ -12,10 +12,6 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@': resolve(__dirname, 'src'),
         '@student-side-job-platform/shared': resolve(__dirname, '../../packages/shared/src'),
-        '@student-side-job-platform/components': resolve(
-          __dirname,
-          '../../packages/components/src'
-        ),
         '@student-side-job-platform/shared-types': resolve(
           __dirname,
           '../../packages/shared-types/src'

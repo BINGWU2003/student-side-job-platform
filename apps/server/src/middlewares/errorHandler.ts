@@ -1,14 +1,20 @@
 import type { Request, Response, NextFunction } from 'express';
+import { ApiCode } from '@student-side-job-platform/shared';
+import { AppError } from '../lib/AppError';
 
-interface AppError extends Error {
-  statusCode?: number;
-}
+export function errorHandler(err: Error, _req: Request, res: Response, _next: NextFunction) {
+  if (err instanceof AppError) {
+    res.status(err.statusCode).json({
+      code: err.apiCode,
+      message: err.message,
+      data: null,
+    });
+    return;
+  }
 
-export function errorHandler(err: AppError, _req: Request, res: Response, _next: NextFunction) {
-  const statusCode = err.statusCode ?? 500;
-  res.status(statusCode).json({
-    code: statusCode,
-    message: err.message || '服务器内部错误',
+  res.status(500).json({
+    code: ApiCode.SERVER_ERROR,
+    message: err.message || 'Internal server error',
     data: null,
   });
 }

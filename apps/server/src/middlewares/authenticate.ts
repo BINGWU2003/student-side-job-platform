@@ -1,24 +1,38 @@
 import type { Request, Response, NextFunction } from 'express';
 import { verifyToken } from '../lib/jwt';
-import { HttpStatus, ApiCode } from '@student-side-job-platform/shared';
+import prisma from '../lib/prisma';
+import { ApiCode } from '@student-side-job-platform/shared';
+import { AppError } from '../lib/AppError';
 
-export function authenticate(req: Request, res: Response, next: NextFunction) {
+export async function authenticate(req: Request, _res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith('Bearer ')) {
-    res
-      .status(HttpStatus.UNAUTHORIZED)
-      .json({ code: ApiCode.UNAUTHORIZED, message: '未授权', data: null });
+    next(new AppError(ApiCode.UNAUTHORIZED, 'Unauthorized', 401));
     return;
   }
 
   try {
     const token = authHeader.slice(7);
     const payload = verifyToken(token);
-    req.user = { id: payload.userId, role: payload.role };
+
+    const user = await prisma.user.findUnique({
+      where: { id: payload.userId },
+      select: { id: true, role: true, status: true },
+    });
+
+    if (!user) {
+      next(new AppError(ApiCode.UNAUTHORIZED, 'Unauthorized', 401));
+      return;
+    }
+
+    if (user.status !== 'ACTIVE') {
+      next(new AppError(ApiCode.FORBIDDEN, 'User is disabled', 403));
+      return;
+    }
+
+    req.user = { id: user.id, role: user.role };
     next();
   } catch {
-    res
-      .status(HttpStatus.UNAUTHORIZED)
-      .json({ code: ApiCode.UNAUTHORIZED, message: 'Token 无效或已过期', data: null });
+    next(new AppError(ApiCode.UNAUTHORIZED, 'Token invalid or expired', 401));
   }
 }

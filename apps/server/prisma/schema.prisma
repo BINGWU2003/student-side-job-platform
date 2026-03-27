@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,32 +7,215 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ===========================
-// 在此处添加你的数据模型
-// ===========================
+enum Role {
+  ADMIN
+  EMPLOYER
+  STUDENT
+}
 
-model Book {
-  id          Int       @id @default(autoincrement())
-  title       String
-  author      String
-  isbn        String?   @unique
-  description String?   @db.Text
-  price       Decimal?  @db.Decimal(10, 2)
-  publishedAt DateTime? @map("published_at")
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+enum UserStatus {
+  ACTIVE
+  DISABLED
+}
 
-  @@map("books")
+enum JobType {
+  PROMOTION
+  TUTORING
+  EVENT
+  CATERING
+  OTHER
+}
+
+enum SalaryType {
+  HOURLY
+  TOTAL
+}
+
+enum JobStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CLOSED
+}
+
+enum AppStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum CmplType {
+  FAKE_INFO
+  ILLEGAL_CONTENT
+  OTHER
+}
+
+enum CmplStatus {
+  PENDING
+  RESOLVED
+  DISMISSED
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  username  String
-  password  String
-  role      String   @default("user")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id              Int              @id @default(autoincrement())
+  username        String           @unique
+  password        String
+  phone           String
+  role            Role
+  status          UserStatus       @default(ACTIVE)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  studentProfile  StudentProfile?
+  employerProfile EmployerProfile?
+  postedJobs      Job[]            @relation("EmployerJobs")
+  favorites       JobFavorite[]    @relation("StudentFavorites")
+  applications    Application[]    @relation("StudentApplications")
+  reviewsGiven    Review[]         @relation("ReviewsGiven")
+  reviewsReceived Review[]         @relation("ReviewsReceived")
+  complaints      Complaint[]      @relation("StudentComplaints")
+  announcements   Announcement[]   @relation("AdminAnnouncements")
+  adminLogs       AdminLog[]       @relation("AdminLogs")
+}
 
-  @@map("users")
+model StudentProfile {
+  id        Int    @id @default(autoincrement())
+  userId    Int    @unique
+  realName  String?
+  studentNo String?
+  school    String?
+  major     String?
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model EmployerProfile {
+  id          Int     @id @default(autoincrement())
+  userId      Int     @unique
+  companyName String?
+  contactName String?
+  description String? @db.Text
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Job {
+  id           Int            @id @default(autoincrement())
+  title        String
+  type         JobType
+  description  String         @db.Text
+  location     String
+  salary       Float
+  salaryType   SalaryType
+  headcount    Int
+  startDate    DateTime
+  endDate      DateTime
+  deadline     DateTime
+  requirement  String?        @db.Text
+  status       JobStatus      @default(PENDING)
+  rejectReason String?        @db.Text
+  employerId   Int
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  employer     User           @relation("EmployerJobs", fields: [employerId], references: [id], onDelete: Cascade)
+  favorites    JobFavorite[]
+  applications Application[]
+  complaints   Complaint[]
+
+  @@index([status])
+  @@index([type])
+  @@index([location])
+  @@index([employerId])
+}
+
+model JobFavorite {
+  id        Int      @id @default(autoincrement())
+  studentId Int
+  jobId     Int
+  createdAt DateTime @default(now())
+  student   User     @relation("StudentFavorites", fields: [studentId], references: [id], onDelete: Cascade)
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, jobId])
+  @@index([studentId])
+  @@index([jobId])
+}
+
+model Application {
+  id        Int         @id @default(autoincrement())
+  jobId     Int
+  studentId Int
+  intro     String?     @db.Text
+  status    AppStatus   @default(PENDING)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  job       Job         @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  student   User        @relation("StudentApplications", fields: [studentId], references: [id], onDelete: Cascade)
+  reviews   Review[]
+
+  @@unique([jobId, studentId])
+  @@index([jobId])
+  @@index([studentId])
+  @@index([status])
+}
+
+model Review {
+  id            Int         @id @default(autoincrement())
+  applicationId Int
+  fromUserId    Int
+  toUserId      Int
+  rating        Int
+  comment       String?     @db.Text
+  createdAt     DateTime    @default(now())
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  fromUser      User        @relation("ReviewsGiven", fields: [fromUserId], references: [id], onDelete: Cascade)
+  toUser        User        @relation("ReviewsReceived", fields: [toUserId], references: [id], onDelete: Cascade)
+
+  @@unique([applicationId, fromUserId])
+  @@index([toUserId])
+  @@index([fromUserId])
+}
+
+model Announcement {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String   @db.Text
+  isPinned  Boolean  @default(false)
+  createdBy Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  creator   User     @relation("AdminAnnouncements", fields: [createdBy], references: [id], onDelete: Cascade)
+
+  @@index([isPinned])
+  @@index([createdBy])
+}
+
+model Complaint {
+  id          Int        @id @default(autoincrement())
+  jobId       Int
+  studentId   Int
+  type        CmplType
+  description String     @db.Text
+  status      CmplStatus @default(PENDING)
+  handleNote  String?    @db.Text
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  job         Job        @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  student     User       @relation("StudentComplaints", fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, studentId])
+  @@index([status])
+  @@index([jobId])
+  @@index([studentId])
+}
+
+model AdminLog {
+  id         Int      @id @default(autoincrement())
+  adminId    Int
+  action     String
+  targetId   Int?
+  targetType String?
+  note       String?  @db.Text
+  createdAt  DateTime @default(now())
+  admin      User     @relation("AdminLogs", fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId])
+  @@index([createdAt])
 }
