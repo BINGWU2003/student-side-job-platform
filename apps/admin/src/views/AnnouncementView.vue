@@ -1,6 +1,11 @@
 ﻿<script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
-import { createAdminAnnouncement, deleteAdminAnnouncement, getAdminAnnouncements, updateAdminAnnouncement } from '@/api/announcements';
+import {
+  createAdminAnnouncement,
+  deleteAdminAnnouncement,
+  getAdminAnnouncements,
+  updateAdminAnnouncement,
+} from '@/api/announcements';
 import type { AnnouncementItem } from '@student-side-job-platform/shared-types';
 
 const loading = ref(false);
@@ -135,9 +140,18 @@ onMounted(load);
     <div v-if="showModal" class="mask" @click.self="showModal = false">
       <div class="modal">
         <h3>{{ editing ? '编辑公告' : '新建公告' }}</h3>
-        <label>标题<input v-model="form.title" /></label>
-        <label>内容<textarea v-model="form.content" rows="6"></textarea></label>
-        <label><input v-model="form.isPinned" type="checkbox" /> 置顶</label>
+        <label>
+          标题
+          <input v-model="form.title" />
+        </label>
+        <label>
+          内容
+          <textarea v-model="form.content" rows="6"></textarea>
+        </label>
+        <label>
+          <input v-model="form.isPinned" type="checkbox" />
+          置顶
+        </label>
         <div class="actions">
           <button @click="showModal = false">取消</button>
           <button @click="submit">保存</button>
@@ -148,17 +162,71 @@ onMounted(load);
 </template>
 
 <style scoped>
-.page { display: grid; gap: 12px; }
-.head { display: flex; justify-content: space-between; align-items: center; }
-button { border: 1px solid #d1d5db; background: #fff; border-radius: 6px; padding: 6px 10px; }
-.table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e7eb; }
-th, td { border-bottom: 1px solid #e5e7eb; padding: 10px; text-align: left; }
-.actions { display: flex; gap: 8px; }
-.danger { color: #dc2626; border-color: #dc2626; }
-.mask { position: fixed; inset: 0; background: rgba(0,0,0,.35); display: grid; place-items: center; }
-.modal { width: min(680px, calc(100vw - 24px)); background: #fff; border-radius: 10px; padding: 12px; display: grid; gap: 10px; }
-label { display: grid; gap: 6px; }
-input, textarea { border: 1px solid #d1d5db; border-radius: 6px; padding: 8px; font: inherit; }
-.error { color: #dc2626; }
-.success { color: #16a34a; }
+.page {
+  display: grid;
+  gap: 12px;
+}
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+button {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+}
+th,
+td {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 10px;
+  text-align: left;
+}
+.actions {
+  display: flex;
+  gap: 8px;
+}
+.danger {
+  color: #dc2626;
+  border-color: #dc2626;
+}
+.mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: grid;
+  place-items: center;
+}
+.modal {
+  width: min(680px, calc(100vw - 24px));
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+}
+label {
+  display: grid;
+  gap: 6px;
+}
+input,
+textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px;
+  font: inherit;
+}
+.error {
+  color: #dc2626;
+}
+.success {
+  color: #16a34a;
+}
 </style>

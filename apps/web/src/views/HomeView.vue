@@ -51,7 +51,7 @@ onMounted(load);
     <p v-if="error" class="error">{{ error }}</p>
     <p v-if="loading">加载中...</p>
 
-    <section class="grid" v-else>
+    <section v-else class="grid">
       <article class="panel">
         <div class="panel-head">
           <h2>最新公告</h2>
@@ -83,21 +83,74 @@ onMounted(load);
 </template>
 
 <style scoped>
-.home { display: grid; gap: 18px; }
-.hero { background: linear-gradient(120deg, #0f172a, #1e293b); color: #fff; border-radius: 14px; padding: 24px; }
-.hero h1 { margin-bottom: 8px; }
-.cta { margin-top: 12px; display: flex; gap: 10px; }
-.cta a { color: #fff; text-decoration: none; border: 1px solid rgba(255,255,255,.35); border-radius: 8px; padding: 8px 12px; }
-.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-.panel { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px; }
-.panel-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.panel-head a { color: #2563eb; text-decoration: none; }
-.list { display: grid; gap: 8px; }
-.list li { list-style: none; }
-.list a { color: #0f172a; text-decoration: none; }
-.meta { display: block; color: #64748b; font-size: 12px; }
-.error { color: #dc2626; }
+.home {
+  display: grid;
+  gap: 18px;
+}
+.hero {
+  background: linear-gradient(120deg, #0f172a, #1e293b);
+  color: #fff;
+  border-radius: 14px;
+  padding: 24px;
+}
+.hero h1 {
+  margin-bottom: 8px;
+}
+.cta {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+}
+.cta a {
+  color: #fff;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.panel {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px;
+}
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.panel-head a {
+  color: #2563eb;
+  text-decoration: none;
+}
+.list {
+  display: grid;
+  gap: 8px;
+}
+.list li {
+  list-style: none;
+}
+.list a {
+  color: #0f172a;
+  text-decoration: none;
+}
+.meta {
+  display: block;
+  color: #64748b;
+  font-size: 12px;
+}
+.error {
+  color: #dc2626;
+}
 @media (max-width: 900px) {
-  .grid { grid-template-columns: 1fr; }
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

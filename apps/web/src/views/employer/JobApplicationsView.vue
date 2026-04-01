@@ -71,8 +71,12 @@ onMounted(load);
           <td>{{ statusLabelMap[item.status] }}</td>
           <td>{{ item.intro ?? '-' }}</td>
           <td class="actions">
-            <button :disabled="item.status !== 'PENDING'" @click="handleReview(item.id, 'accept')">录用</button>
-            <button :disabled="item.status !== 'PENDING'" @click="handleReview(item.id, 'reject')">拒绝</button>
+            <button :disabled="item.status !== 'PENDING'" @click="handleReview(item.id, 'accept')">
+              录用
+            </button>
+            <button :disabled="item.status !== 'PENDING'" @click="handleReview(item.id, 'reject')">
+              拒绝
+            </button>
           </td>
         </tr>
       </tbody>
@@ -83,10 +87,33 @@ onMounted(load);
 </template>
 
 <style scoped>
-.page { display: grid; gap: 12px; }
-.table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e2e8f0; }
-th, td { border-bottom: 1px solid #e2e8f0; padding: 10px; text-align: left; }
-.actions { display: flex; gap: 8px; }
-button { border: 1px solid #94a3b8; border-radius: 6px; padding: 6px 10px; background: #fff; }
-.error { color: #dc2626; }
+.page {
+  display: grid;
+  gap: 12px;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+}
+th,
+td {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 10px;
+  text-align: left;
+}
+.actions {
+  display: flex;
+  gap: 8px;
+}
+button {
+  border: 1px solid #94a3b8;
+  border-radius: 6px;
+  padding: 6px 10px;
+  background: #fff;
+}
+.error {
+  color: #dc2626;
+}
 </style>

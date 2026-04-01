@@ -25,7 +25,11 @@ async function load() {
   loading.value = true;
   error.value = '';
   try {
-    const data = await getEmployerJobs({ page: page.value, pageSize, status: status.value || undefined });
+    const data = await getEmployerJobs({
+      page: page.value,
+      pageSize,
+      status: status.value || undefined,
+    });
     list.value = data.list;
     total.value = data.total;
   } catch {
@@ -55,7 +59,13 @@ onMounted(load);
   <section class="page">
     <h1>我的岗位</h1>
     <div class="toolbar">
-      <select v-model="status" @change="page = 1; load()">
+      <select
+        v-model="status"
+        @change="
+          page = 1;
+          load();
+        "
+      >
         <option value="">全部状态</option>
         <option value="PENDING">待审核</option>
         <option value="APPROVED">已通过</option>
@@ -84,7 +94,12 @@ onMounted(load);
           <td>{{ job.location }}</td>
           <td class="actions">
             <button @click="goApplications(job.id)">申请管理</button>
-            <button v-if="job.status === 'PENDING' || job.status === 'REJECTED'" @click="goEdit(job.id)">编辑</button>
+            <button
+              v-if="job.status === 'PENDING' || job.status === 'REJECTED'"
+              @click="goEdit(job.id)"
+            >
+              编辑
+            </button>
             <button v-if="job.status === 'APPROVED'" @click="handleClose(job.id)">关闭</button>
           </td>
         </tr>
@@ -94,20 +109,71 @@ onMounted(load);
     <p v-else-if="!loading">暂无岗位记录</p>
 
     <div class="pager">
-      <button :disabled="page <= 1" @click="page -= 1; load()">上一页</button>
+      <button
+        :disabled="page <= 1"
+        @click="
+          page -= 1;
+          load();
+        "
+      >
+        上一页
+      </button>
       <span>第 {{ page }} / {{ totalPages }} 页</span>
-      <button :disabled="page >= totalPages" @click="page += 1; load()">下一页</button>
+      <button
+        :disabled="page >= totalPages"
+        @click="
+          page += 1;
+          load();
+        "
+      >
+        下一页
+      </button>
     </div>
   </section>
 </template>
 
 <style scoped>
-.page { display: grid; gap: 12px; }
-.toolbar { display: flex; gap: 8px; align-items: center; }
-select, .create, button { border: 1px solid #cbd5e1; border-radius: 8px; padding: 6px 10px; background: #fff; text-decoration: none; color: #111827; }
-.table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e2e8f0; }
-th, td { border-bottom: 1px solid #e2e8f0; padding: 10px; text-align: left; }
-.actions { display: flex; gap: 8px; }
-.pager { display: flex; gap: 10px; align-items: center; }
-.error { color: #dc2626; }
+.page {
+  display: grid;
+  gap: 12px;
+}
+.toolbar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+select,
+.create,
+button {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 6px 10px;
+  background: #fff;
+  text-decoration: none;
+  color: #111827;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+}
+th,
+td {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 10px;
+  text-align: left;
+}
+.actions {
+  display: flex;
+  gap: 8px;
+}
+.pager {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.error {
+  color: #dc2626;
+}
 </style>

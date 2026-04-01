@@ -16,7 +16,11 @@ router.post('/reviews', authenticate, async (req, res, next) => {
 
     const parsed = submitReviewSchema.safeParse(req.body);
     if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid payload', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        parsed.error.issues[0]?.message ?? 'Invalid payload',
+        400
+      );
     }
 
     const { applicationId, rating, comment } = parsed.data;

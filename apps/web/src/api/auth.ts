@@ -1,8 +1,16 @@
 import { http } from './index';
-import type { ApiResponse, LoginResponse, RegisterRequest, UserInfo } from '@student-side-job-platform/shared-types';
+import type {
+  ApiResponse,
+  LoginResponse,
+  RegisterRequest,
+  UserInfo,
+} from '@student-side-job-platform/shared-types';
 
 export async function login(username: string, password: string): Promise<LoginResponse> {
-  const res = await http.post<ApiResponse<LoginResponse>>('/api/auth/login', { username, password });
+  const res = await http.post<ApiResponse<LoginResponse>>('/api/auth/login', {
+    username,
+    password,
+  });
   return res.data.data as LoginResponse;
 }
 
@@ -21,6 +29,14 @@ export async function updateMe(payload: Record<string, unknown>): Promise<UserIn
   return res.data.data as UserInfo;
 }
 
-export async function updatePassword(oldPassword: string, newPassword: string, confirmPassword: string): Promise<void> {
-  await http.patch<ApiResponse<null>>('/api/auth/password', { oldPassword, newPassword, confirmPassword });
+export async function updatePassword(
+  oldPassword: string,
+  newPassword: string,
+  confirmPassword: string
+): Promise<void> {
+  await http.patch<ApiResponse<null>>('/api/auth/password', {
+    oldPassword,
+    newPassword,
+    confirmPassword,
+  });
 }

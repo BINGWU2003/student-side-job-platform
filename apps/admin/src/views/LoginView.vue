@@ -47,7 +47,12 @@ async function handleLogin() {
       </div>
       <div class="field">
         <label>密码</label>
-        <input v-model="password" type="password" placeholder="请输入密码" autocomplete="current-password" />
+        <input
+          v-model="password"
+          type="password"
+          placeholder="请输入密码"
+          autocomplete="current-password"
+        />
       </div>
       <p v-if="error" class="error">{{ error }}</p>
       <button type="submit" :disabled="loading">{{ loading ? '登录中...' : '登录' }}</button>
@@ -56,12 +61,51 @@ async function handleLogin() {
 </template>
 
 <style scoped>
-.login-box { background: #fff; padding: 2rem; border-radius: 10px; width: 360px; box-shadow: 0 2px 16px rgba(0,0,0,.1); }
-h1 { text-align: center; margin-bottom: 1.5rem; font-size: 1.5rem; }
-.field { margin-bottom: 1rem; }
-.field label { display: block; margin-bottom: .25rem; font-size: .875rem; color: #4b5563; }
-.field input { width: 100%; padding: .55rem .75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; }
-.error { color: #ef4444; font-size: .875rem; margin-bottom: .5rem; }
-button { width: 100%; padding: .65rem; background: #1d4ed8; color: #fff; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; }
-button:disabled { opacity: .6; cursor: not-allowed; }
+.login-box {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 360px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+}
+h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+.field {
+  margin-bottom: 1rem;
+}
+.field label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+.field input {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+.error {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+button {
+  width: 100%;
+  padding: 0.65rem;
+  background: #1d4ed8;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 </style>

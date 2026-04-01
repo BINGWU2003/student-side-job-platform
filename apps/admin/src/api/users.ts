@@ -1,5 +1,12 @@
 ﻿import { http } from './index';
-import type { ApiResponse, PagedData, ReviewItem, Role, UserInfo, UserStatus } from '@student-side-job-platform/shared-types';
+import type {
+  ApiResponse,
+  PagedData,
+  ReviewItem,
+  Role,
+  UserInfo,
+  UserStatus,
+} from '@student-side-job-platform/shared-types';
 
 export interface AdminUserDetail extends UserInfo {
   reviews: Array<ReviewItem & { fromUser?: { id: number; username: string; role: Role } }>;

@@ -36,7 +36,11 @@ async function load() {
   loading.value = true;
   error.value = '';
   try {
-    const data = await getAdminComplaints({ page: page.value, pageSize, status: status.value || undefined });
+    const data = await getAdminComplaints({
+      page: page.value,
+      pageSize,
+      status: status.value || undefined,
+    });
     list.value = data.list;
     total.value = data.total;
   } catch {
@@ -79,7 +83,13 @@ onMounted(load);
     <h1>投诉管理</h1>
 
     <div class="toolbar">
-      <select v-model="status" @change="page = 1; load()">
+      <select
+        v-model="status"
+        @change="
+          page = 1;
+          load();
+        "
+      >
         <option value="">全部状态</option>
         <option value="PENDING">待处理</option>
         <option value="RESOLVED">已解决</option>
@@ -122,9 +132,25 @@ onMounted(load);
     <p v-else-if="!loading">暂无投诉数据</p>
 
     <div class="pager">
-      <button :disabled="page <= 1" @click="page -= 1; load()">上一页</button>
+      <button
+        :disabled="page <= 1"
+        @click="
+          page -= 1;
+          load();
+        "
+      >
+        上一页
+      </button>
       <span>第 {{ page }} / {{ totalPages }} 页，共 {{ total }} 条</span>
-      <button :disabled="page >= totalPages" @click="page += 1; load()">下一页</button>
+      <button
+        :disabled="page >= totalPages"
+        @click="
+          page += 1;
+          load();
+        "
+      >
+        下一页
+      </button>
     </div>
 
     <div v-if="current" class="mask" @click.self="current = null">
@@ -145,7 +171,8 @@ onMounted(load);
           <textarea v-model="form.note" rows="4" placeholder="可选"></textarea>
         </label>
         <label>
-          <input v-model="form.closeJob" type="checkbox" /> 同时关闭该岗位
+          <input v-model="form.closeJob" type="checkbox" />
+          同时关闭该岗位
         </label>
 
         <div class="actions">
@@ -158,17 +185,70 @@ onMounted(load);
 </template>
 
 <style scoped>
-.page { display: grid; gap: 12px; }
-.toolbar { display: flex; gap: 10px; }
-select, button { border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 10px; }
-.table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e7eb; }
-th, td { border-bottom: 1px solid #e5e7eb; padding: 10px; text-align: left; }
-.pager { display: flex; gap: 12px; align-items: center; }
-.mask { position: fixed; inset: 0; background: rgba(0,0,0,.35); display: grid; place-items: center; }
-.modal { width: min(680px, calc(100vw - 24px)); background: #fff; border-radius: 10px; padding: 12px; display: grid; gap: 10px; }
-label { display: grid; gap: 6px; }
-textarea { border: 1px solid #d1d5db; border-radius: 6px; padding: 8px; font: inherit; }
-.actions { display: flex; gap: 8px; }
-.error { color: #dc2626; }
-.success { color: #16a34a; }
+.page {
+  display: grid;
+  gap: 12px;
+}
+.toolbar {
+  display: flex;
+  gap: 10px;
+}
+select,
+button {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+}
+th,
+td {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 10px;
+  text-align: left;
+}
+.pager {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: grid;
+  place-items: center;
+}
+.modal {
+  width: min(680px, calc(100vw - 24px));
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+}
+label {
+  display: grid;
+  gap: 6px;
+}
+textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px;
+  font: inherit;
+}
+.actions {
+  display: flex;
+  gap: 8px;
+}
+.error {
+  color: #dc2626;
+}
+.success {
+  color: #16a34a;
+}
 </style>

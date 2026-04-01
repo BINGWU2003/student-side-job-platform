@@ -119,14 +119,52 @@ onMounted(load);
 </template>
 
 <style scoped>
-.page { display: grid; gap: 14px; }
-.filters { display: flex; gap: 8px; flex-wrap: wrap; }
-input, select, button { border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px 10px; }
-button { background: #0f172a; color: #fff; border-color: #0f172a; cursor: pointer; }
-.cards { display: grid; gap: 10px; }
-.card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; }
-.link { color: #2563eb; text-decoration: none; }
-.pager { display: flex; align-items: center; gap: 10px; }
-.hint { color: #64748b; font-size: 13px; }
-.error { color: #dc2626; }
+.page {
+  display: grid;
+  gap: 14px;
+}
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+input,
+select,
+button {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+button {
+  background: #0f172a;
+  color: #fff;
+  border-color: #0f172a;
+  cursor: pointer;
+}
+.cards {
+  display: grid;
+  gap: 10px;
+}
+.card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px;
+}
+.link {
+  color: #2563eb;
+  text-decoration: none;
+}
+.pager {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hint {
+  color: #64748b;
+  font-size: 13px;
+}
+.error {
+  color: #dc2626;
+}
 </style>

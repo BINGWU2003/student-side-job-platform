@@ -55,7 +55,11 @@ router.post('/admin/announcements', authenticate, requireRole('ADMIN'), async (r
   try {
     const parsed = createAnnouncementSchema.safeParse(req.body);
     if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid payload', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        parsed.error.issues[0]?.message ?? 'Invalid payload',
+        400
+      );
     }
 
     const item = await prisma.announcement.create({
@@ -73,55 +77,77 @@ router.post('/admin/announcements', authenticate, requireRole('ADMIN'), async (r
   }
 });
 
-router.put('/admin/announcements/:id', authenticate, requireRole('ADMIN'), async (req, res, next) => {
-  try {
-    const idParsed = idParamSchema.safeParse(req.params);
-    if (!idParsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, idParsed.error.issues[0]?.message ?? 'Invalid id', 400);
+router.put(
+  '/admin/announcements/:id',
+  authenticate,
+  requireRole('ADMIN'),
+  async (req, res, next) => {
+    try {
+      const idParsed = idParamSchema.safeParse(req.params);
+      if (!idParsed.success) {
+        throw new AppError(
+          ApiCode.BAD_REQUEST,
+          idParsed.error.issues[0]?.message ?? 'Invalid id',
+          400
+        );
+      }
+
+      const parsed = createAnnouncementSchema.safeParse(req.body);
+      if (!parsed.success) {
+        throw new AppError(
+          ApiCode.BAD_REQUEST,
+          parsed.error.issues[0]?.message ?? 'Invalid payload',
+          400
+        );
+      }
+
+      const exists = await prisma.announcement.findUnique({ where: { id: idParsed.data.id } });
+      if (!exists) {
+        throw new AppError(ApiCode.NOT_FOUND, 'Announcement not found', 404);
+      }
+
+      const item = await prisma.announcement.update({
+        where: { id: idParsed.data.id },
+        data: {
+          title: parsed.data.title,
+          content: parsed.data.content,
+          isPinned: parsed.data.isPinned ?? false,
+        },
+      });
+
+      res.json({ code: ApiCode.SUCCESS, message: 'success', data: item });
+    } catch (error) {
+      next(error);
     }
-
-    const parsed = createAnnouncementSchema.safeParse(req.body);
-    if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid payload', 400);
-    }
-
-    const exists = await prisma.announcement.findUnique({ where: { id: idParsed.data.id } });
-    if (!exists) {
-      throw new AppError(ApiCode.NOT_FOUND, 'Announcement not found', 404);
-    }
-
-    const item = await prisma.announcement.update({
-      where: { id: idParsed.data.id },
-      data: {
-        title: parsed.data.title,
-        content: parsed.data.content,
-        isPinned: parsed.data.isPinned ?? false,
-      },
-    });
-
-    res.json({ code: ApiCode.SUCCESS, message: 'success', data: item });
-  } catch (error) {
-    next(error);
   }
-});
+);
 
-router.delete('/admin/announcements/:id', authenticate, requireRole('ADMIN'), async (req, res, next) => {
-  try {
-    const parsed = idParamSchema.safeParse(req.params);
-    if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid id', 400);
+router.delete(
+  '/admin/announcements/:id',
+  authenticate,
+  requireRole('ADMIN'),
+  async (req, res, next) => {
+    try {
+      const parsed = idParamSchema.safeParse(req.params);
+      if (!parsed.success) {
+        throw new AppError(
+          ApiCode.BAD_REQUEST,
+          parsed.error.issues[0]?.message ?? 'Invalid id',
+          400
+        );
+      }
+
+      const exists = await prisma.announcement.findUnique({ where: { id: parsed.data.id } });
+      if (!exists) {
+        throw new AppError(ApiCode.NOT_FOUND, 'Announcement not found', 404);
+      }
+
+      await prisma.announcement.delete({ where: { id: parsed.data.id } });
+      res.json({ code: ApiCode.SUCCESS, message: 'success', data: null });
+    } catch (error) {
+      next(error);
     }
-
-    const exists = await prisma.announcement.findUnique({ where: { id: parsed.data.id } });
-    if (!exists) {
-      throw new AppError(ApiCode.NOT_FOUND, 'Announcement not found', 404);
-    }
-
-    await prisma.announcement.delete({ where: { id: parsed.data.id } });
-    res.json({ code: ApiCode.SUCCESS, message: 'success', data: null });
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 export default router;

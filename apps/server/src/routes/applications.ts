@@ -17,7 +17,11 @@ router.post('/applications', authenticate, requireRole('STUDENT'), async (req, r
   try {
     const parsed = submitApplicationSchema.safeParse(req.body);
     if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid payload', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        parsed.error.issues[0]?.message ?? 'Invalid payload',
+        400
+      );
     }
 
     const { jobId, intro } = parsed.data;
@@ -63,7 +67,11 @@ router.get('/applications/my', authenticate, requireRole('STUDENT'), async (req,
   try {
     const parsed = pageQuerySchema.safeParse(req.query);
     if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid query', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        parsed.error.issues[0]?.message ?? 'Invalid query',
+        400
+      );
     }
 
     const { page, pageSize } = parsed.data;
@@ -117,7 +125,11 @@ router.get('/applications/my', authenticate, requireRole('STUDENT'), async (req,
       hasReviewed: reviewedSet.has(item.id),
     }));
 
-    res.json({ code: ApiCode.SUCCESS, message: 'success', data: { list: mapped, total, page, pageSize } });
+    res.json({
+      code: ApiCode.SUCCESS,
+      message: 'success',
+      data: { list: mapped, total, page, pageSize },
+    });
   } catch (error) {
     next(error);
   }
@@ -167,7 +179,11 @@ router.get(
 
       const queryParsed = pageQuerySchema.safeParse(req.query);
       if (!queryParsed.success) {
-        throw new AppError(ApiCode.BAD_REQUEST, queryParsed.error.issues[0]?.message ?? 'Invalid query', 400);
+        throw new AppError(
+          ApiCode.BAD_REQUEST,
+          queryParsed.error.issues[0]?.message ?? 'Invalid query',
+          400
+        );
       }
 
       const { page, pageSize } = queryParsed.data;
@@ -222,11 +238,15 @@ router.get(
         hasReviewed: reviewedSet.has(item.id),
       }));
 
-      res.json({ code: ApiCode.SUCCESS, message: 'success', data: { list: mapped, total, page, pageSize } });
+      res.json({
+        code: ApiCode.SUCCESS,
+        message: 'success',
+        data: { list: mapped, total, page, pageSize },
+      });
     } catch (error) {
       next(error);
     }
-  },
+  }
 );
 
 router.patch(
@@ -237,12 +257,20 @@ router.patch(
     try {
       const idParsed = idParamSchema.safeParse(req.params);
       if (!idParsed.success) {
-        throw new AppError(ApiCode.BAD_REQUEST, idParsed.error.issues[0]?.message ?? 'Invalid id', 400);
+        throw new AppError(
+          ApiCode.BAD_REQUEST,
+          idParsed.error.issues[0]?.message ?? 'Invalid id',
+          400
+        );
       }
 
       const bodyParsed = reviewApplicationSchema.safeParse(req.body);
       if (!bodyParsed.success) {
-        throw new AppError(ApiCode.BAD_REQUEST, bodyParsed.error.issues[0]?.message ?? 'Invalid payload', 400);
+        throw new AppError(
+          ApiCode.BAD_REQUEST,
+          bodyParsed.error.issues[0]?.message ?? 'Invalid payload',
+          400
+        );
       }
 
       const appId = idParsed.data.id;
@@ -300,7 +328,7 @@ router.patch(
     } catch (error) {
       next(error);
     }
-  },
+  }
 );
 
 export default router;

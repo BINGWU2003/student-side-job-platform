@@ -15,12 +15,18 @@ export async function createAdminAnnouncement(payload: {
   return res.data.data as AnnouncementItem;
 }
 
-export async function updateAdminAnnouncement(id: number, payload: {
-  title: string;
-  content: string;
-  isPinned?: boolean;
-}): Promise<AnnouncementItem> {
-  const res = await http.put<ApiResponse<AnnouncementItem>>(`/api/admin/announcements/${id}`, payload);
+export async function updateAdminAnnouncement(
+  id: number,
+  payload: {
+    title: string;
+    content: string;
+    isPinned?: boolean;
+  }
+): Promise<AnnouncementItem> {
+  const res = await http.put<ApiResponse<AnnouncementItem>>(
+    `/api/admin/announcements/${id}`,
+    payload
+  );
   return res.data.data as AnnouncementItem;
 }
 

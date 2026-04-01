@@ -94,20 +94,70 @@ onMounted(load);
     <p v-else-if="!loading">暂无日志数据</p>
 
     <div class="pager">
-      <button :disabled="page <= 1" @click="page -= 1; load()">上一页</button>
+      <button
+        :disabled="page <= 1"
+        @click="
+          page -= 1;
+          load();
+        "
+      >
+        上一页
+      </button>
       <span>第 {{ page }} / {{ totalPages }} 页，共 {{ total }} 条</span>
-      <button :disabled="page >= totalPages" @click="page += 1; load()">下一页</button>
+      <button
+        :disabled="page >= totalPages"
+        @click="
+          page += 1;
+          load();
+        "
+      >
+        下一页
+      </button>
     </div>
   </section>
 </template>
 
 <style scoped>
-.page { display: grid; gap: 12px; }
-.toolbar { display: flex; gap: 12px; align-items: end; flex-wrap: wrap; }
-label { display: grid; gap: 4px; font-size: 13px; color: #374151; }
-input, button { border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 10px; }
-.table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e7eb; }
-th, td { border-bottom: 1px solid #e5e7eb; padding: 10px; text-align: left; }
-.pager { display: flex; gap: 12px; align-items: center; }
-.error { color: #dc2626; }
+.page {
+  display: grid;
+  gap: 12px;
+}
+.toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: end;
+  flex-wrap: wrap;
+}
+label {
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+  color: #374151;
+}
+input,
+button {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+}
+th,
+td {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 10px;
+  text-align: left;
+}
+.pager {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.error {
+  color: #dc2626;
+}
 </style>

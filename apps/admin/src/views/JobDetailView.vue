@@ -71,7 +71,10 @@ async function handleReject() {
   reviewError.value = '';
   success.value = '';
   try {
-    detail.value = await reviewAdminJob(detail.value.id, { action: 'reject', reason: rejectReason.value.trim() });
+    detail.value = await reviewAdminJob(detail.value.id, {
+      action: 'reject',
+      reason: rejectReason.value.trim(),
+    });
     success.value = '已审核拒绝';
   } catch {
     reviewError.value = '审核拒绝失败';
@@ -126,14 +129,57 @@ onMounted(load);
 </template>
 
 <style scoped>
-.page { display: grid; gap: 12px; }
-.back { width: fit-content; border: 1px solid #d1d5db; background: #fff; border-radius: 6px; padding: 6px 10px; }
-.card { display: grid; gap: 8px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px; }
-.sub, .review { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e5e7eb; display: grid; gap: 6px; }
-textarea { border: 1px solid #d1d5db; border-radius: 6px; padding: 8px; }
-.actions { display: flex; gap: 10px; }
-button { border: 1px solid #2563eb; background: #2563eb; color: #fff; border-radius: 6px; padding: 6px 12px; }
-button.danger { background: #ef4444; border-color: #ef4444; }
-.error { color: #dc2626; }
-.success { color: #16a34a; }
+.page {
+  display: grid;
+  gap: 12px;
+}
+.back {
+  width: fit-content;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+.card {
+  display: grid;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 14px;
+}
+.sub,
+.review {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed #e5e7eb;
+  display: grid;
+  gap: 6px;
+}
+textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px;
+}
+.actions {
+  display: flex;
+  gap: 10px;
+}
+button {
+  border: 1px solid #2563eb;
+  background: #2563eb;
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+button.danger {
+  background: #ef4444;
+  border-color: #ef4444;
+}
+.error {
+  color: #dc2626;
+}
+.success {
+  color: #16a34a;
+}
 </style>

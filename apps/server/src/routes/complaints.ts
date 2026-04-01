@@ -17,7 +17,11 @@ router.post('/complaints', authenticate, requireRole('STUDENT'), async (req, res
   try {
     const parsed = submitComplaintSchema.safeParse(req.body);
     if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid payload', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        parsed.error.issues[0]?.message ?? 'Invalid payload',
+        400
+      );
     }
 
     const { jobId, type, description } = parsed.data;
@@ -55,7 +59,11 @@ router.get('/complaints/my', authenticate, requireRole('STUDENT'), async (req, r
   try {
     const parsed = pageQuerySchema.safeParse(req.query);
     if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid query', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        parsed.error.issues[0]?.message ?? 'Invalid query',
+        400
+      );
     }
 
     const { page, pageSize } = parsed.data;
@@ -93,11 +101,18 @@ router.get('/admin/complaints', authenticate, requireRole('ADMIN'), async (req, 
     const allowed = new Set(['PENDING', 'RESOLVED', 'DISMISSED']);
     const parsed = pageQuerySchema.safeParse(req.query);
     if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid query', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        parsed.error.issues[0]?.message ?? 'Invalid query',
+        400
+      );
     }
 
     const { page, pageSize } = parsed.data;
-    const where = status && allowed.has(status) ? { status: status as 'PENDING' | 'RESOLVED' | 'DISMISSED' } : {};
+    const where =
+      status && allowed.has(status)
+        ? { status: status as 'PENDING' | 'RESOLVED' | 'DISMISSED' }
+        : {};
 
     const [total, list] = await Promise.all([
       prisma.complaint.count({ where }),
@@ -133,64 +148,77 @@ router.get('/admin/complaints', authenticate, requireRole('ADMIN'), async (req, 
   }
 });
 
-router.patch('/admin/complaints/:id/handle', authenticate, requireRole('ADMIN'), async (req, res, next) => {
-  try {
-    const idParsed = idParamSchema.safeParse(req.params);
-    if (!idParsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, idParsed.error.issues[0]?.message ?? 'Invalid id', 400);
+router.patch(
+  '/admin/complaints/:id/handle',
+  authenticate,
+  requireRole('ADMIN'),
+  async (req, res, next) => {
+    try {
+      const idParsed = idParamSchema.safeParse(req.params);
+      if (!idParsed.success) {
+        throw new AppError(
+          ApiCode.BAD_REQUEST,
+          idParsed.error.issues[0]?.message ?? 'Invalid id',
+          400
+        );
+      }
+
+      const bodyParsed = handleComplaintSchema.safeParse(req.body);
+      if (!bodyParsed.success) {
+        throw new AppError(
+          ApiCode.BAD_REQUEST,
+          bodyParsed.error.issues[0]?.message ?? 'Invalid payload',
+          400
+        );
+      }
+
+      const complaintId = idParsed.data.id;
+      const { status, note, closeJob } = bodyParsed.data;
+
+      const updated = await prisma.$transaction(async (tx) => {
+        const existing = await tx.complaint.findUnique({
+          where: { id: complaintId },
+          select: { id: true, jobId: true, status: true },
+        });
+
+        if (!existing) {
+          throw new AppError(ApiCode.NOT_FOUND, 'Complaint not found', 404);
+        }
+
+        if (existing.status !== 'PENDING') {
+          throw new AppError(ApiCode.FORBIDDEN, 'Complaint has already been handled', 403);
+        }
+
+        if (closeJob) {
+          await tx.job.update({ where: { id: existing.jobId }, data: { status: 'CLOSED' } });
+        }
+
+        const handled = await tx.complaint.update({
+          where: { id: complaintId },
+          data: {
+            status,
+            handleNote: note ?? null,
+          },
+        });
+
+        await tx.adminLog.create({
+          data: {
+            adminId: req.user!.id,
+            action: status === 'RESOLVED' ? 'RESOLVE_COMPLAINT' : 'DISMISS_COMPLAINT',
+            targetId: complaintId,
+            targetType: 'COMPLAINT',
+            note: note ?? null,
+          },
+        });
+
+        return handled;
+      });
+
+      res.json({ code: ApiCode.SUCCESS, message: 'success', data: updated });
+    } catch (error) {
+      next(error);
     }
-
-    const bodyParsed = handleComplaintSchema.safeParse(req.body);
-    if (!bodyParsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, bodyParsed.error.issues[0]?.message ?? 'Invalid payload', 400);
-    }
-
-    const complaintId = idParsed.data.id;
-    const { status, note, closeJob } = bodyParsed.data;
-
-    const updated = await prisma.$transaction(async (tx) => {
-      const existing = await tx.complaint.findUnique({
-        where: { id: complaintId },
-        select: { id: true, jobId: true, status: true },
-      });
-
-      if (!existing) {
-        throw new AppError(ApiCode.NOT_FOUND, 'Complaint not found', 404);
-      }
-
-      if (existing.status !== 'PENDING') {
-        throw new AppError(ApiCode.FORBIDDEN, 'Complaint has already been handled', 403);
-      }
-
-      if (closeJob) {
-        await tx.job.update({ where: { id: existing.jobId }, data: { status: 'CLOSED' } });
-      }
-
-      const handled = await tx.complaint.update({
-        where: { id: complaintId },
-        data: {
-          status,
-          handleNote: note ?? null,
-        },
-      });
-
-      await tx.adminLog.create({
-        data: {
-          adminId: req.user!.id,
-          action: status === 'RESOLVED' ? 'RESOLVE_COMPLAINT' : 'DISMISS_COMPLAINT',
-          targetId: complaintId,
-          targetType: 'COMPLAINT',
-          note: note ?? null,
-        },
-      });
-
-      return handled;
-    });
-
-    res.json({ code: ApiCode.SUCCESS, message: 'success', data: updated });
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 export default router;

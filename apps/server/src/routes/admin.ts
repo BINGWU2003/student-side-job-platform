@@ -4,7 +4,11 @@ import { authenticate } from '../middlewares/authenticate';
 import { requireRole } from '../middlewares/requireRole';
 import { ApiCode } from '@student-side-job-platform/shared';
 import { AppError } from '../lib/AppError';
-import { idParamSchema, pageQuerySchema, updateUserStatusSchema } from '@student-side-job-platform/shared-schemas';
+import {
+  idParamSchema,
+  pageQuerySchema,
+  updateUserStatusSchema,
+} from '@student-side-job-platform/shared-schemas';
 
 const router = Router();
 
@@ -70,8 +74,14 @@ router.get('/admin/dashboard', authenticate, requireRole('ADMIN'), async (_req, 
       prisma.application.count({ where: { status: 'PENDING' } }),
       prisma.application.count({ where: { status: 'ACCEPTED' } }),
       prisma.application.count({ where: { status: 'REJECTED' } }),
-      prisma.user.findMany({ where: { createdAt: { gte: sevenDaysAgo } }, select: { createdAt: true } }),
-      prisma.job.findMany({ where: { createdAt: { gte: sevenDaysAgo } }, select: { createdAt: true } }),
+      prisma.user.findMany({
+        where: { createdAt: { gte: sevenDaysAgo } },
+        select: { createdAt: true },
+      }),
+      prisma.job.findMany({
+        where: { createdAt: { gte: sevenDaysAgo } },
+        select: { createdAt: true },
+      }),
     ]);
 
     res.json({
@@ -111,7 +121,11 @@ router.get('/admin/users', authenticate, requireRole('ADMIN'), async (req, res, 
   try {
     const parsed = pageQuerySchema.safeParse(req.query);
     if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid query', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        parsed.error.issues[0]?.message ?? 'Invalid query',
+        400
+      );
     }
 
     const role = typeof req.query.role === 'string' ? req.query.role : undefined;
@@ -149,7 +163,11 @@ router.get('/admin/users/:id', authenticate, requireRole('ADMIN'), async (req, r
   try {
     const parsed = idParamSchema.safeParse(req.params);
     if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid user id', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        parsed.error.issues[0]?.message ?? 'Invalid user id',
+        400
+      );
     }
 
     const userId = parsed.data.id;
@@ -185,60 +203,78 @@ router.get('/admin/users/:id', authenticate, requireRole('ADMIN'), async (req, r
   }
 });
 
-router.patch('/admin/users/:id/status', authenticate, requireRole('ADMIN'), async (req, res, next) => {
-  try {
-    const idParsed = idParamSchema.safeParse(req.params);
-    if (!idParsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, idParsed.error.issues[0]?.message ?? 'Invalid user id', 400);
-    }
+router.patch(
+  '/admin/users/:id/status',
+  authenticate,
+  requireRole('ADMIN'),
+  async (req, res, next) => {
+    try {
+      const idParsed = idParamSchema.safeParse(req.params);
+      if (!idParsed.success) {
+        throw new AppError(
+          ApiCode.BAD_REQUEST,
+          idParsed.error.issues[0]?.message ?? 'Invalid user id',
+          400
+        );
+      }
 
-    const bodyParsed = updateUserStatusSchema.safeParse(req.body);
-    if (!bodyParsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, bodyParsed.error.issues[0]?.message ?? 'Invalid payload', 400);
-    }
+      const bodyParsed = updateUserStatusSchema.safeParse(req.body);
+      if (!bodyParsed.success) {
+        throw new AppError(
+          ApiCode.BAD_REQUEST,
+          bodyParsed.error.issues[0]?.message ?? 'Invalid payload',
+          400
+        );
+      }
 
-    const userId = idParsed.data.id;
-    const { status } = bodyParsed.data;
+      const userId = idParsed.data.id;
+      const { status } = bodyParsed.data;
 
-    const user = await prisma.user.findUnique({ where: { id: userId } });
-    if (!user) {
-      throw new AppError(ApiCode.NOT_FOUND, 'User not found', 404);
-    }
+      const user = await prisma.user.findUnique({ where: { id: userId } });
+      if (!user) {
+        throw new AppError(ApiCode.NOT_FOUND, 'User not found', 404);
+      }
 
-    const updated = await prisma.$transaction(async (tx) => {
-      const nextUser = await tx.user.update({
-        where: { id: userId },
-        data: { status },
+      const updated = await prisma.$transaction(async (tx) => {
+        const nextUser = await tx.user.update({
+          where: { id: userId },
+          data: { status },
+        });
+
+        await tx.adminLog.create({
+          data: {
+            adminId: req.user!.id,
+            action: status === 'DISABLED' ? 'DISABLE_USER' : 'ENABLE_USER',
+            targetId: userId,
+            targetType: 'USER',
+            note: null,
+          },
+        });
+
+        return nextUser;
       });
 
-      await tx.adminLog.create({
-        data: {
-          adminId: req.user!.id,
-          action: status === 'DISABLED' ? 'DISABLE_USER' : 'ENABLE_USER',
-          targetId: userId,
-          targetType: 'USER',
-          note: null,
-        },
-      });
-
-      return nextUser;
-    });
-
-    res.json({ code: ApiCode.SUCCESS, message: 'success', data: updated });
-  } catch (error) {
-    next(error);
+      res.json({ code: ApiCode.SUCCESS, message: 'success', data: updated });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 router.get('/admin/logs', authenticate, requireRole('ADMIN'), async (req, res, next) => {
   try {
     const parsed = pageQuerySchema.safeParse(req.query);
     if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid query', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        parsed.error.issues[0]?.message ?? 'Invalid query',
+        400
+      );
     }
 
     const { page, pageSize } = parsed.data;
-    const startDate = typeof req.query.startDate === 'string' ? new Date(req.query.startDate) : undefined;
+    const startDate =
+      typeof req.query.startDate === 'string' ? new Date(req.query.startDate) : undefined;
     const endDate = typeof req.query.endDate === 'string' ? new Date(req.query.endDate) : undefined;
 
     const where = {

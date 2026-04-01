@@ -40,10 +40,32 @@ onMounted(load);
 </template>
 
 <style scoped>
-.page { display: grid; gap: 12px; }
-.list { display: grid; gap: 10px; }
-.card { list-style: none; display: grid; gap: 4px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; }
-.card a { color: #111827; text-decoration: none; font-weight: 600; }
-small { color: #64748b; }
-.error { color: #dc2626; }
+.page {
+  display: grid;
+  gap: 12px;
+}
+.list {
+  display: grid;
+  gap: 10px;
+}
+.card {
+  list-style: none;
+  display: grid;
+  gap: 4px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px;
+}
+.card a {
+  color: #111827;
+  text-decoration: none;
+  font-weight: 600;
+}
+small {
+  color: #64748b;
+}
+.error {
+  color: #dc2626;
+}
 </style>

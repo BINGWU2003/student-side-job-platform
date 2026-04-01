@@ -92,11 +92,44 @@ onMounted(load);
 </template>
 
 <style scoped>
-.page { display: grid; gap: 12px; }
-.back { width: fit-content; border: 1px solid #d1d5db; background: #fff; border-radius: 6px; padding: 6px 10px; }
-.card { display: grid; gap: 8px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px; }
-.sub { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e5e7eb; display: grid; gap: 6px; }
-.table { width: 100%; border-collapse: collapse; border: 1px solid #e5e7eb; }
-th, td { border-bottom: 1px solid #e5e7eb; padding: 8px; text-align: left; }
-.error { color: #dc2626; }
+.page {
+  display: grid;
+  gap: 12px;
+}
+.back {
+  width: fit-content;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+.card {
+  display: grid;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 14px;
+}
+.sub {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed #e5e7eb;
+  display: grid;
+  gap: 6px;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #e5e7eb;
+}
+th,
+td {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 8px;
+  text-align: left;
+}
+.error {
+  color: #dc2626;
+}
 </style>

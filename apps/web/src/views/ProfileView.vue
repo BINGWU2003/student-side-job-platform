@@ -101,7 +101,11 @@ async function savePassword() {
   error.value = '';
   success.value = '';
   try {
-    await updatePassword(passwordForm.oldPassword, passwordForm.newPassword, passwordForm.confirmPassword);
+    await updatePassword(
+      passwordForm.oldPassword,
+      passwordForm.newPassword,
+      passwordForm.confirmPassword
+    );
     success.value = '密码更新成功';
     passwordForm.oldPassword = '';
     passwordForm.newPassword = '';
@@ -138,16 +142,37 @@ onMounted(() => {
           </label>
 
           <template v-if="isStudent">
-            <label>姓名<input v-model="profileForm.realName" /></label>
-            <label>学号<input v-model="profileForm.studentNo" /></label>
-            <label>学校<input v-model="profileForm.school" /></label>
-            <label>专业<input v-model="profileForm.major" /></label>
+            <label>
+              姓名
+              <input v-model="profileForm.realName" />
+            </label>
+            <label>
+              学号
+              <input v-model="profileForm.studentNo" />
+            </label>
+            <label>
+              学校
+              <input v-model="profileForm.school" />
+            </label>
+            <label>
+              专业
+              <input v-model="profileForm.major" />
+            </label>
           </template>
 
           <template v-if="isEmployer">
-            <label>企业/组织<input v-model="profileForm.companyName" /></label>
-            <label>联系人<input v-model="profileForm.contactName" /></label>
-            <label>简介<textarea v-model="profileForm.description" /></label>
+            <label>
+              企业/组织
+              <input v-model="profileForm.companyName" />
+            </label>
+            <label>
+              联系人
+              <input v-model="profileForm.contactName" />
+            </label>
+            <label>
+              简介
+              <textarea v-model="profileForm.description" />
+            </label>
           </template>
 
           <button @click="saveProfile">保存资料</button>
@@ -157,9 +182,18 @@ onMounted(() => {
       <article class="card">
         <h2>修改密码</h2>
         <div class="form">
-          <label>当前密码<input v-model="passwordForm.oldPassword" type="password" /></label>
-          <label>新密码<input v-model="passwordForm.newPassword" type="password" /></label>
-          <label>确认新密码<input v-model="passwordForm.confirmPassword" type="password" /></label>
+          <label>
+            当前密码
+            <input v-model="passwordForm.oldPassword" type="password" />
+          </label>
+          <label>
+            新密码
+            <input v-model="passwordForm.newPassword" type="password" />
+          </label>
+          <label>
+            确认新密码
+            <input v-model="passwordForm.confirmPassword" type="password" />
+          </label>
           <button @click="savePassword">更新密码</button>
         </div>
       </article>
@@ -168,14 +202,55 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.page { display: grid; gap: 12px; }
-.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px; }
-.form { display: grid; gap: 8px; }
-label { display: grid; gap: 4px; font-size: 13px; color: #334155; }
-input, textarea { border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px; font: inherit; }
-button { width: fit-content; border: 1px solid #0f172a; background: #0f172a; color: #fff; border-radius: 8px; padding: 8px 12px; }
-.error { color: #dc2626; }
-.success { color: #16a34a; }
-@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+.page {
+  display: grid;
+  gap: 12px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px;
+}
+.form {
+  display: grid;
+  gap: 8px;
+}
+label {
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+  color: #334155;
+}
+input,
+textarea {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 8px;
+  font: inherit;
+}
+button {
+  width: fit-content;
+  border: 1px solid #0f172a;
+  background: #0f172a;
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+.error {
+  color: #dc2626;
+}
+.success {
+  color: #16a34a;
+}
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

@@ -24,11 +24,27 @@ const router = createRouter({
       children: [
         { path: '', name: 'dashboard', component: () => import('../views/DashboardView.vue') },
         { path: 'jobs', name: 'jobs', component: () => import('../views/JobListView.vue') },
-        { path: 'jobs/:id', name: 'job-detail', component: () => import('../views/JobDetailView.vue') },
+        {
+          path: 'jobs/:id',
+          name: 'job-detail',
+          component: () => import('../views/JobDetailView.vue'),
+        },
         { path: 'users', name: 'users', component: () => import('../views/UserListView.vue') },
-        { path: 'users/:id', name: 'user-detail', component: () => import('../views/UserDetailView.vue') },
-        { path: 'announcements', name: 'announcements', component: () => import('../views/AnnouncementView.vue') },
-        { path: 'complaints', name: 'complaints', component: () => import('../views/ComplaintView.vue') },
+        {
+          path: 'users/:id',
+          name: 'user-detail',
+          component: () => import('../views/UserDetailView.vue'),
+        },
+        {
+          path: 'announcements',
+          name: 'announcements',
+          component: () => import('../views/AnnouncementView.vue'),
+        },
+        {
+          path: 'complaints',
+          name: 'complaints',
+          component: () => import('../views/ComplaintView.vue'),
+        },
         { path: 'logs', name: 'logs', component: () => import('../views/LogView.vue') },
       ],
     },

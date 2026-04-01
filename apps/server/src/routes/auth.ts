@@ -44,7 +44,11 @@ router.post('/register', async (req, res, next) => {
   try {
     const parsed = registerSchema.safeParse(req.body);
     if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid payload', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        parsed.error.issues[0]?.message ?? 'Invalid payload',
+        400
+      );
     }
 
     const data = parsed.data;
@@ -110,7 +114,11 @@ router.post('/login', async (req, res, next) => {
   try {
     const parsed = loginSchema.safeParse(req.body);
     if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid payload', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        parsed.error.issues[0]?.message ?? 'Invalid payload',
+        400
+      );
     }
 
     const { username, password } = parsed.data;
@@ -176,7 +184,11 @@ router.put('/me', authenticate, async (req, res, next) => {
 
     const parsed = updateProfileSchema.safeParse(req.body);
     if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid payload', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        parsed.error.issues[0]?.message ?? 'Invalid payload',
+        400
+      );
     }
 
     const input = parsed.data;
@@ -262,7 +274,11 @@ router.patch('/password', authenticate, async (req, res, next) => {
 
     const parsed = updatePasswordSchema.safeParse(req.body);
     if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid payload', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        parsed.error.issues[0]?.message ?? 'Invalid payload',
+        400
+      );
     }
 
     const { oldPassword, newPassword } = parsed.data;

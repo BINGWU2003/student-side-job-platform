@@ -19,7 +19,8 @@ const router = Router();
 function parseStatusPagingQuery(query: Record<string, unknown>) {
   const allowedStatus = new Set<JobStatus>(['PENDING', 'APPROVED', 'REJECTED', 'CLOSED']);
   const rawStatus = typeof query.status === 'string' ? query.status : undefined;
-  const status = rawStatus && allowedStatus.has(rawStatus as JobStatus) ? (rawStatus as JobStatus) : undefined;
+  const status =
+    rawStatus && allowedStatus.has(rawStatus as JobStatus) ? (rawStatus as JobStatus) : undefined;
   const page = Math.max(1, Number(query.page) || 1);
   const pageSize = Math.min(100, Math.max(1, Number(query.pageSize) || 10));
   return { status, page, pageSize };
@@ -29,7 +30,11 @@ router.get('/jobs', optionalAuthenticate, async (req, res, next) => {
   try {
     const parsed = jobListQuerySchema.safeParse(req.query);
     if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid query', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        parsed.error.issues[0]?.message ?? 'Invalid query',
+        400
+      );
     }
 
     const { type, location, sort, page, pageSize } = parsed.data;
@@ -74,7 +79,11 @@ router.get('/jobs/:id', optionalAuthenticate, async (req, res, next) => {
   try {
     const idParsed = idParamSchema.safeParse(req.params);
     if (!idParsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, idParsed.error.issues[0]?.message ?? 'Invalid id', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        idParsed.error.issues[0]?.message ?? 'Invalid id',
+        400
+      );
     }
 
     const jobId = idParsed.data.id;
@@ -134,7 +143,11 @@ router.post('/jobs', authenticate, requireRole('EMPLOYER'), async (req, res, nex
   try {
     const parsed = createJobSchema.safeParse(req.body);
     if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid payload', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        parsed.error.issues[0]?.message ?? 'Invalid payload',
+        400
+      );
     }
 
     const data = parsed.data;
@@ -181,7 +194,11 @@ router.get('/employer/jobs/:id', authenticate, requireRole('EMPLOYER'), async (r
   try {
     const idParsed = idParamSchema.safeParse(req.params);
     if (!idParsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, idParsed.error.issues[0]?.message ?? 'Invalid id', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        idParsed.error.issues[0]?.message ?? 'Invalid id',
+        400
+      );
     }
 
     const job = await prisma.job.findFirst({
@@ -205,12 +222,20 @@ router.put('/employer/jobs/:id', authenticate, requireRole('EMPLOYER'), async (r
   try {
     const idParsed = idParamSchema.safeParse(req.params);
     if (!idParsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, idParsed.error.issues[0]?.message ?? 'Invalid id', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        idParsed.error.issues[0]?.message ?? 'Invalid id',
+        400
+      );
     }
 
     const payloadParsed = updateJobSchema.safeParse(req.body);
     if (!payloadParsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, payloadParsed.error.issues[0]?.message ?? 'Invalid payload', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        payloadParsed.error.issues[0]?.message ?? 'Invalid payload',
+        400
+      );
     }
 
     const existing = await prisma.job.findFirst({
@@ -255,35 +280,44 @@ router.put('/employer/jobs/:id', authenticate, requireRole('EMPLOYER'), async (r
   }
 });
 
-router.patch('/employer/jobs/:id/close', authenticate, requireRole('EMPLOYER'), async (req, res, next) => {
-  try {
-    const idParsed = idParamSchema.safeParse(req.params);
-    if (!idParsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, idParsed.error.issues[0]?.message ?? 'Invalid id', 400);
+router.patch(
+  '/employer/jobs/:id/close',
+  authenticate,
+  requireRole('EMPLOYER'),
+  async (req, res, next) => {
+    try {
+      const idParsed = idParamSchema.safeParse(req.params);
+      if (!idParsed.success) {
+        throw new AppError(
+          ApiCode.BAD_REQUEST,
+          idParsed.error.issues[0]?.message ?? 'Invalid id',
+          400
+        );
+      }
+
+      const existing = await prisma.job.findFirst({
+        where: { id: idParsed.data.id, employerId: req.user!.id },
+      });
+
+      if (!existing) {
+        throw new AppError(ApiCode.NOT_FOUND, 'Job not found', 404);
+      }
+
+      if (existing.status !== 'APPROVED') {
+        throw new AppError(ApiCode.FORBIDDEN, 'Only approved jobs can be closed', 403);
+      }
+
+      const job = await prisma.job.update({
+        where: { id: existing.id },
+        data: { status: 'CLOSED' },
+      });
+
+      res.json({ code: ApiCode.SUCCESS, message: 'success', data: job });
+    } catch (error) {
+      next(error);
     }
-
-    const existing = await prisma.job.findFirst({
-      where: { id: idParsed.data.id, employerId: req.user!.id },
-    });
-
-    if (!existing) {
-      throw new AppError(ApiCode.NOT_FOUND, 'Job not found', 404);
-    }
-
-    if (existing.status !== 'APPROVED') {
-      throw new AppError(ApiCode.FORBIDDEN, 'Only approved jobs can be closed', 403);
-    }
-
-    const job = await prisma.job.update({
-      where: { id: existing.id },
-      data: { status: 'CLOSED' },
-    });
-
-    res.json({ code: ApiCode.SUCCESS, message: 'success', data: job });
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 router.get('/admin/jobs', authenticate, requireRole('ADMIN'), async (req, res, next) => {
   try {
@@ -321,7 +355,11 @@ router.get('/admin/jobs/:id', authenticate, requireRole('ADMIN'), async (req, re
   try {
     const idParsed = idParamSchema.safeParse(req.params);
     if (!idParsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, idParsed.error.issues[0]?.message ?? 'Invalid id', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        idParsed.error.issues[0]?.message ?? 'Invalid id',
+        400
+      );
     }
 
     const job = await prisma.job.findUnique({
@@ -349,56 +387,69 @@ router.get('/admin/jobs/:id', authenticate, requireRole('ADMIN'), async (req, re
   }
 });
 
-router.patch('/admin/jobs/:id/review', authenticate, requireRole('ADMIN'), async (req, res, next) => {
-  try {
-    const idParsed = idParamSchema.safeParse(req.params);
-    if (!idParsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, idParsed.error.issues[0]?.message ?? 'Invalid id', 400);
-    }
+router.patch(
+  '/admin/jobs/:id/review',
+  authenticate,
+  requireRole('ADMIN'),
+  async (req, res, next) => {
+    try {
+      const idParsed = idParamSchema.safeParse(req.params);
+      if (!idParsed.success) {
+        throw new AppError(
+          ApiCode.BAD_REQUEST,
+          idParsed.error.issues[0]?.message ?? 'Invalid id',
+          400
+        );
+      }
 
-    const payloadParsed = reviewJobSchema.safeParse(req.body);
-    if (!payloadParsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, payloadParsed.error.issues[0]?.message ?? 'Invalid payload', 400);
-    }
+      const payloadParsed = reviewJobSchema.safeParse(req.body);
+      if (!payloadParsed.success) {
+        throw new AppError(
+          ApiCode.BAD_REQUEST,
+          payloadParsed.error.issues[0]?.message ?? 'Invalid payload',
+          400
+        );
+      }
 
-    const id = idParsed.data.id;
-    const existing = await prisma.job.findUnique({ where: { id } });
-    if (!existing) {
-      throw new AppError(ApiCode.NOT_FOUND, 'Job not found', 404);
-    }
+      const id = idParsed.data.id;
+      const existing = await prisma.job.findUnique({ where: { id } });
+      if (!existing) {
+        throw new AppError(ApiCode.NOT_FOUND, 'Job not found', 404);
+      }
 
-    if (existing.status !== 'PENDING') {
-      throw new AppError(ApiCode.FORBIDDEN, 'Only pending jobs can be reviewed', 403);
-    }
+      if (existing.status !== 'PENDING') {
+        throw new AppError(ApiCode.FORBIDDEN, 'Only pending jobs can be reviewed', 403);
+      }
 
-    const { action, reason } = payloadParsed.data;
+      const { action, reason } = payloadParsed.data;
 
-    const job = await prisma.$transaction(async (tx) => {
-      const updated = await tx.job.update({
-        where: { id },
-        data:
-          action === 'approve'
-            ? { status: 'APPROVED', rejectReason: null }
-            : { status: 'REJECTED', rejectReason: reason ?? null },
+      const job = await prisma.$transaction(async (tx) => {
+        const updated = await tx.job.update({
+          where: { id },
+          data:
+            action === 'approve'
+              ? { status: 'APPROVED', rejectReason: null }
+              : { status: 'REJECTED', rejectReason: reason ?? null },
+        });
+
+        await tx.adminLog.create({
+          data: {
+            adminId: req.user!.id,
+            action: action === 'approve' ? 'APPROVE_JOB' : 'REJECT_JOB',
+            targetId: id,
+            targetType: 'JOB',
+            note: action === 'reject' ? (reason ?? null) : null,
+          },
+        });
+
+        return updated;
       });
 
-      await tx.adminLog.create({
-        data: {
-          adminId: req.user!.id,
-          action: action === 'approve' ? 'APPROVE_JOB' : 'REJECT_JOB',
-          targetId: id,
-          targetType: 'JOB',
-          note: action === 'reject' ? reason ?? null : null,
-        },
-      });
-
-      return updated;
-    });
-
-    res.json({ code: ApiCode.SUCCESS, message: 'success', data: job });
-  } catch (error) {
-    next(error);
+      res.json({ code: ApiCode.SUCCESS, message: 'success', data: job });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 export default router;

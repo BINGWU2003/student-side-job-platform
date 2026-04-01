@@ -1,5 +1,10 @@
 ﻿import { http } from './index';
-import type { ApiResponse, JobItem, JobStatus, PagedData } from '@student-side-job-platform/shared-types';
+import type {
+  ApiResponse,
+  JobItem,
+  JobStatus,
+  PagedData,
+} from '@student-side-job-platform/shared-types';
 
 export interface AdminJobItem extends JobItem {
   employer?: {
@@ -29,7 +34,10 @@ export async function getAdminJob(id: number): Promise<AdminJobItem> {
   return res.data.data as AdminJobItem;
 }
 
-export async function reviewAdminJob(id: number, payload: { action: 'approve' | 'reject'; reason?: string }): Promise<AdminJobItem> {
+export async function reviewAdminJob(
+  id: number,
+  payload: { action: 'approve' | 'reject'; reason?: string }
+): Promise<AdminJobItem> {
   const res = await http.patch<ApiResponse<AdminJobItem>>(`/api/admin/jobs/${id}/review`, payload);
   return res.data.data as AdminJobItem;
 }

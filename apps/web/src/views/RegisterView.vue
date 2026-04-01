@@ -84,7 +84,12 @@ async function handleSubmit() {
       <input v-model="username" placeholder="用户名" autocomplete="username" />
       <input v-model="phone" placeholder="手机号（11位）" autocomplete="tel" />
       <input v-model="password" type="password" placeholder="密码" autocomplete="new-password" />
-      <input v-model="confirmPassword" type="password" placeholder="确认密码" autocomplete="new-password" />
+      <input
+        v-model="confirmPassword"
+        type="password"
+        placeholder="确认密码"
+        autocomplete="new-password"
+      />
 
       <template v-if="isStudent">
         <input v-model="realName" placeholder="姓名（选填）" />
@@ -107,10 +112,39 @@ async function handleSubmit() {
 </template>
 
 <style scoped>
-.card { width: 460px; padding: 24px; background: #fff; border-radius: 10px; box-shadow: 0 8px 30px rgba(15,23,42,.08); }
-form { display: grid; gap: 10px; }
-input, select, textarea { border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font: inherit; }
-button { background: #0f172a; color: #fff; border: 0; border-radius: 8px; padding: 10px; cursor: pointer; }
-.error { color: #dc2626; font-size: 13px; }
-.success { color: #16a34a; font-size: 13px; }
+.card {
+  width: 460px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+}
+form {
+  display: grid;
+  gap: 10px;
+}
+input,
+select,
+textarea {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 10px;
+  font: inherit;
+}
+button {
+  background: #0f172a;
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+}
+.error {
+  color: #dc2626;
+  font-size: 13px;
+}
+.success {
+  color: #16a34a;
+  font-size: 13px;
+}
 </style>

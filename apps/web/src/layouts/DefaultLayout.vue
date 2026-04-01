@@ -48,7 +48,9 @@ function handleLogout() {
 </template>
 
 <style scoped>
-.layout { min-height: 100vh; }
+.layout {
+  min-height: 100vh;
+}
 .header {
   min-height: 64px;
   display: flex;
@@ -60,10 +62,28 @@ function handleLogout() {
   background: #0f172a;
   color: #fff;
 }
-.brand { color: #fff; text-decoration: none; font-weight: 700; }
-.nav, .actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-.nav a, .actions a { color: #dbeafe; text-decoration: none; font-size: 14px; }
-.nav a.router-link-active, .actions a.router-link-active { color: #93c5fd; }
+.brand {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+}
+.nav,
+.actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.nav a,
+.actions a {
+  color: #dbeafe;
+  text-decoration: none;
+  font-size: 14px;
+}
+.nav a.router-link-active,
+.actions a.router-link-active {
+  color: #93c5fd;
+}
 button {
   border: 1px solid #60a5fa;
   background: transparent;
@@ -72,5 +92,9 @@ button {
   padding: 4px 10px;
   cursor: pointer;
 }
-.main { max-width: 1200px; margin: 0 auto; padding: 20px 16px; }
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 16px;
+}
 </style>

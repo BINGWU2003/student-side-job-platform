@@ -12,7 +12,11 @@ router.post('/favorites/:jobId', authenticate, requireRole('STUDENT'), async (re
   try {
     const parsed = idParamSchema.safeParse({ id: req.params.jobId });
     if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid job id', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        parsed.error.issues[0]?.message ?? 'Invalid job id',
+        400
+      );
     }
 
     const jobId = parsed.data.id;
@@ -52,7 +56,11 @@ router.delete('/favorites/:jobId', authenticate, requireRole('STUDENT'), async (
   try {
     const parsed = idParamSchema.safeParse({ id: req.params.jobId });
     if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid job id', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        parsed.error.issues[0]?.message ?? 'Invalid job id',
+        400
+      );
     }
 
     const jobId = parsed.data.id;
@@ -88,7 +96,11 @@ router.get('/favorites/my', authenticate, requireRole('STUDENT'), async (req, re
   try {
     const parsed = pageQuerySchema.safeParse(req.query);
     if (!parsed.success) {
-      throw new AppError(ApiCode.BAD_REQUEST, parsed.error.issues[0]?.message ?? 'Invalid query', 400);
+      throw new AppError(
+        ApiCode.BAD_REQUEST,
+        parsed.error.issues[0]?.message ?? 'Invalid query',
+        400
+      );
     }
 
     const { page, pageSize } = parsed.data;

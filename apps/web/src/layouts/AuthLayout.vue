@@ -13,4 +13,3 @@
   background: linear-gradient(135deg, #e0ecff 0%, #f5f8ff 100%);
 }
 </style>
-

@@ -27,7 +27,12 @@ async function ensureUser(params: {
   });
 }
 
-async function ensureAnnouncement(adminId: number, title: string, content: string, isPinned: boolean) {
+async function ensureAnnouncement(
+  adminId: number,
+  title: string,
+  content: string,
+  isPinned: boolean
+) {
   const exists = await prisma.announcement.findFirst({ where: { title } });
   if (exists) return exists;
   return prisma.announcement.create({
@@ -144,18 +149,41 @@ async function main() {
 
   await prisma.studentProfile.upsert({
     where: { userId: studentA.id },
-    update: { realName: '张三', studentNo: '20260001', school: '华南理工大学', major: '计算机科学' },
-    create: { userId: studentA.id, realName: '张三', studentNo: '20260001', school: '华南理工大学', major: '计算机科学' },
+    update: {
+      realName: '张三',
+      studentNo: '20260001',
+      school: '华南理工大学',
+      major: '计算机科学',
+    },
+    create: {
+      userId: studentA.id,
+      realName: '张三',
+      studentNo: '20260001',
+      school: '华南理工大学',
+      major: '计算机科学',
+    },
   });
   await prisma.studentProfile.upsert({
     where: { userId: studentB.id },
     update: { realName: '李四', studentNo: '20260002', school: '中山大学', major: '市场营销' },
-    create: { userId: studentB.id, realName: '李四', studentNo: '20260002', school: '中山大学', major: '市场营销' },
+    create: {
+      userId: studentB.id,
+      realName: '李四',
+      studentNo: '20260002',
+      school: '中山大学',
+      major: '市场营销',
+    },
   });
   await prisma.studentProfile.upsert({
     where: { userId: studentC.id },
     update: { realName: '王五', studentNo: '20260003', school: '暨南大学', major: '英语' },
-    create: { userId: studentC.id, realName: '王五', studentNo: '20260003', school: '暨南大学', major: '英语' },
+    create: {
+      userId: studentC.id,
+      realName: '王五',
+      studentNo: '20260003',
+      school: '暨南大学',
+      major: '英语',
+    },
   });
 
   const jobA = await ensureJob({
@@ -165,13 +193,7 @@ async function main() {
     salaryType: 'HOURLY',
     status: 'APPROVED',
   });
-  const jobB = await ensureJob({
-    employerId: employerA.id,
-    title: '[DEMO] 周末家教辅导',
-    type: 'TUTORING',
-    salaryType: 'HOURLY',
-    status: 'PENDING',
-  });
+
   const jobC = await ensureJob({
     employerId: employerB.id,
     title: '[DEMO] 展会协助兼职',
@@ -191,19 +213,28 @@ async function main() {
   const appA = await prisma.application.upsert({
     where: { jobId_studentId: { jobId: jobA.id, studentId: studentA.id } },
     update: { status: 'ACCEPTED', intro: '有地推经验，沟通能力强' },
-    create: { jobId: jobA.id, studentId: studentA.id, status: 'ACCEPTED', intro: '有地推经验，沟通能力强' },
+    create: {
+      jobId: jobA.id,
+      studentId: studentA.id,
+      status: 'ACCEPTED',
+      intro: '有地推经验，沟通能力强',
+    },
   });
   await prisma.application.upsert({
     where: { jobId_studentId: { jobId: jobA.id, studentId: studentB.id } },
     update: { status: 'PENDING', intro: '时间充裕，可长期兼职' },
-    create: { jobId: jobA.id, studentId: studentB.id, status: 'PENDING', intro: '时间充裕，可长期兼职' },
+    create: {
+      jobId: jobA.id,
+      studentId: studentB.id,
+      status: 'PENDING',
+      intro: '时间充裕，可长期兼职',
+    },
   });
   await prisma.application.upsert({
     where: { jobId_studentId: { jobId: jobC.id, studentId: studentC.id } },
     update: { status: 'REJECTED', intro: '做过展会引导' },
     create: { jobId: jobC.id, studentId: studentC.id, status: 'REJECTED', intro: '做过展会引导' },
   });
-
   await prisma.review.upsert({
     where: { applicationId_fromUserId: { applicationId: appA.id, fromUserId: studentA.id } },
     update: { toUserId: employerA.id, rating: 5, comment: '雇主沟通顺畅，结算及时' },
@@ -239,7 +270,12 @@ async function main() {
   });
 
   await ensureAnnouncement(admin.id, '[DEMO] 平台使用须知', '请勿私下转账，所有沟通留痕。', true);
-  await ensureAnnouncement(admin.id, '[DEMO] 五一兼职提醒', '节假日岗位较多，请及时完善个人资料。', false);
+  await ensureAnnouncement(
+    admin.id,
+    '[DEMO] 五一兼职提醒',
+    '节假日岗位较多，请及时完善个人资料。',
+    false
+  );
 
   const complaint = await prisma.complaint.upsert({
     where: { jobId_studentId: { jobId: jobA.id, studentId: studentB.id } },
@@ -262,7 +298,12 @@ async function main() {
   const logTemplates = [
     { action: 'APPROVE_JOB', targetId: jobA.id, targetType: 'JOB', note: null },
     { action: 'REJECT_JOB', targetId: jobD.id, targetType: 'JOB', note: '信息不完整' },
-    { action: 'RESOLVE_COMPLAINT', targetId: complaint.id, targetType: 'COMPLAINT', note: '已处理' },
+    {
+      action: 'RESOLVE_COMPLAINT',
+      targetId: complaint.id,
+      targetType: 'COMPLAINT',
+      note: '已处理',
+    },
   ];
 
   for (const row of logTemplates) {
@@ -304,4 +345,3 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
-

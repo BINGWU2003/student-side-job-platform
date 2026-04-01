@@ -7,5 +7,8 @@
 </template>
 
 <style scoped>
-.not-found { padding: 2rem; text-align: center; }
+.not-found {
+  padding: 2rem;
+  text-align: center;
+}
 </style>

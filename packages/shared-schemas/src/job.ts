@@ -31,31 +31,34 @@ const createJobBaseSchema = z
 
 export const createJobSchema = createJobBaseSchema;
 
-export const updateJobSchema = z.object(jobFields).partial().superRefine((data, ctx) => {
-  if (Object.keys(data).length === 0) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: 'At least one field is required',
-    });
-    return;
-  }
+export const updateJobSchema = z
+  .object(jobFields)
+  .partial()
+  .superRefine((data, ctx) => {
+    if (Object.keys(data).length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'At least one field is required',
+      });
+      return;
+    }
 
-  if (data.startDate && data.endDate && data.endDate < data.startDate) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      path: ['endDate'],
-      message: 'endDate must be greater than or equal to startDate',
-    });
-  }
+    if (data.startDate && data.endDate && data.endDate < data.startDate) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['endDate'],
+        message: 'endDate must be greater than or equal to startDate',
+      });
+    }
 
-  if (data.deadline && data.startDate && data.deadline > data.startDate) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      path: ['deadline'],
-      message: 'deadline must be before or equal to startDate',
-    });
-  }
-});
+    if (data.deadline && data.startDate && data.deadline > data.startDate) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['deadline'],
+        message: 'deadline must be before or equal to startDate',
+      });
+    }
+  });
 
 export const reviewJobSchema = z
   .object({

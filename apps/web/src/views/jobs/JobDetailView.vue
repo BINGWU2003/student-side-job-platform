@@ -86,7 +86,9 @@ onMounted(load);
       <p>截止日期：{{ String(detail.deadline).slice(0, 10) }}</p>
 
       <div v-if="isStudent" class="actions">
-        <button @click="handleApply" :disabled="!!detail.hasApplied">{{ detail.hasApplied ? '已申请' : '申请' }}</button>
+        <button :disabled="!!detail.hasApplied" @click="handleApply">
+          {{ detail.hasApplied ? '已申请' : '申请' }}
+        </button>
         <button @click="handleFavorite">{{ detail.isFavorited ? '取消收藏' : '收藏' }}</button>
         <button @click="handleComplaint">投诉</button>
       </div>
@@ -97,10 +99,34 @@ onMounted(load);
 </template>
 
 <style scoped>
-.page { display: grid; gap: 12px; }
-.card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; display: grid; gap: 8px; }
-.actions { display: flex; gap: 10px; margin-top: 8px; }
-button { border: 1px solid #94a3b8; background: #fff; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
-.error { color: #dc2626; }
-.ok { color: #16a34a; }
+.page {
+  display: grid;
+  gap: 12px;
+}
+.card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  display: grid;
+  gap: 8px;
+}
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+button {
+  border: 1px solid #94a3b8;
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.error {
+  color: #dc2626;
+}
+.ok {
+  color: #16a34a;
+}
 </style>

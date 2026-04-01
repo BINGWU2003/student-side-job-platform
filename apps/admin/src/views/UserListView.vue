@@ -64,13 +64,25 @@ onMounted(load);
     <h1>用户管理</h1>
 
     <div class="toolbar">
-      <select v-model="role" @change="page = 1; load()">
+      <select
+        v-model="role"
+        @change="
+          page = 1;
+          load();
+        "
+      >
         <option value="">全部角色</option>
         <option value="STUDENT">学生</option>
         <option value="EMPLOYER">雇主</option>
         <option value="ADMIN">管理员</option>
       </select>
-      <select v-model="status" @change="page = 1; load()">
+      <select
+        v-model="status"
+        @change="
+          page = 1;
+          load();
+        "
+      >
         <option value="">全部状态</option>
         <option value="ACTIVE">启用</option>
         <option value="DISABLED">禁用</option>
@@ -101,7 +113,9 @@ onMounted(load);
           <td>{{ statusLabelMap[item.status] }}</td>
           <td class="actions">
             <RouterLink :to="`/users/${item.id}`">详情</RouterLink>
-            <button @click="toggleStatus(item)">{{ item.status === 'ACTIVE' ? '禁用' : '启用' }}</button>
+            <button @click="toggleStatus(item)">
+              {{ item.status === 'ACTIVE' ? '禁用' : '启用' }}
+            </button>
           </td>
         </tr>
       </tbody>
@@ -110,21 +124,70 @@ onMounted(load);
     <p v-else-if="!loading">暂无用户数据</p>
 
     <div class="pager">
-      <button :disabled="page <= 1" @click="page -= 1; load()">上一页</button>
+      <button
+        :disabled="page <= 1"
+        @click="
+          page -= 1;
+          load();
+        "
+      >
+        上一页
+      </button>
       <span>第 {{ page }} / {{ totalPages }} 页，共 {{ total }} 条</span>
-      <button :disabled="page >= totalPages" @click="page += 1; load()">下一页</button>
+      <button
+        :disabled="page >= totalPages"
+        @click="
+          page += 1;
+          load();
+        "
+      >
+        下一页
+      </button>
     </div>
   </section>
 </template>
 
 <style scoped>
-.page { display: grid; gap: 12px; }
-.toolbar { display: flex; gap: 10px; }
-select, button { border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 10px; }
-.table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e7eb; }
-th, td { border-bottom: 1px solid #e5e7eb; padding: 10px; text-align: left; }
-.actions { display: flex; gap: 8px; align-items: center; }
-.pager { display: flex; gap: 12px; align-items: center; }
-.error { color: #dc2626; }
-.success { color: #16a34a; }
+.page {
+  display: grid;
+  gap: 12px;
+}
+.toolbar {
+  display: flex;
+  gap: 10px;
+}
+select,
+button {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+}
+th,
+td {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 10px;
+  text-align: left;
+}
+.actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.pager {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.error {
+  color: #dc2626;
+}
+.success {
+  color: #16a34a;
+}
 </style>

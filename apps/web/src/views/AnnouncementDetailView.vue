@@ -38,8 +38,23 @@ onMounted(load);
 </template>
 
 <style scoped>
-.page { display: grid; gap: 12px; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; }
-.meta { color: #64748b; font-size: 13px; }
-.content { white-space: pre-wrap; line-height: 1.65; }
-.error { color: #dc2626; }
+.page {
+  display: grid;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+}
+.meta {
+  color: #64748b;
+  font-size: 13px;
+}
+.content {
+  white-space: pre-wrap;
+  line-height: 1.65;
+}
+.error {
+  color: #dc2626;
+}
 </style>
